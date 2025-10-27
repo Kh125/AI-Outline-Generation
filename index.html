@@ -7,114 +7,178 @@
     <!-- Add CDN link for marked.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
+        /* Base styles */
+        :root {
+            --bg-color: #0d1117; /* GitHub dark background */
+            --container-bg: #161b22; /* Slightly lighter container */
+            --border-color: #30363d; /* GitHub border */
+            --input-bg: #0d1117; /* Input background */
+            --input-border: #21262d; /* Input border */
+            --text-primary: #c9d1d9; /* Primary text */
+            --text-secondary: #8b949e; /* Secondary/label text */
+            --accent-blue: #58a6ff; /* GitHub blue */
+            --button-bg: #238636; /* GitHub green button */
+            --button-hover-bg: #2ea043; /* GitHub green button hover */
+            --error-text: #f85149; /* GitHub error red */
+            --error-border: #f85149;
+        }
+
         body {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-            font-family: sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
+            line-height: 1.5;
         }
 
         .container {
-            background-color: #2b2b2b;
+            background-color: var(--container-bg);
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 6px; /* GitHub uses 6px */
+            border: 1px solid var(--border-color);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px; /* Slightly wider */
         }
 
         h1, h2 {
-            color: #ffffff;
-            border-bottom: 1px solid #444;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* More spacing */
+            font-weight: 600;
         }
+        h1 { font-size: 1.8em; }
+        h2 { font-size: 1.4em; }
 
         label {
             display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            color: #cccccc;
-            font-weight: bold;
+            margin-top: 20px; /* More spacing */
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 600; /* Slightly bolder labels */
+            font-size: 0.9em;
         }
 
         input[type="number"],
         select,
         textarea {
-            width: calc(100% - 22px); /* Account for padding and border */
-            padding: 10px;
+            width: calc(100% - 24px); /* Account for padding and border */
+            padding: 10px 12px;
             margin-bottom: 15px;
-            border: 1px solid #555;
-            border-radius: 4px;
-            background-color: #3b3b3b;
-            color: #e0e0e0;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
             font-size: 1rem;
+            line-height: 1.5;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3); /* Subtle focus ring */
         }
 
         textarea {
             resize: vertical; /* Allow vertical resizing */
+            min-height: 100px; /* Ensure decent minimum height */
         }
 
+        select {
+             width: 100%; /* Select needs full width */
+             appearance: none; /* Custom dropdown arrow styling needed for full control */
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%238b949e'%3E%3Cpath d='M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z'/%3E%3C/svg%3E");
+             background-repeat: no-repeat;
+             background-position: right 10px center;
+             background-size: 16px;
+             padding-right: 30px; /* Space for arrow */
+        }
+
+
         button {
-            background-color: #007bff;
+            background-color: var(--button-bg);
             color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+            font-weight: 500;
+            transition: background-color 0.2s ease-out;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: var(--button-hover-bg);
+            border-color: rgba(240, 246, 252, 0.1);
+        }
+        button:disabled {
+             background-color: #21262d;
+             color: #8b949e;
+             cursor: not-allowed;
+             border-color: rgba(240, 246, 252, 0.1);
         }
 
         hr {
             border: none;
-            border-top: 1px solid #444;
-            margin: 30px 0;
+            border-top: 1px solid var(--border-color);
+            margin: 35px 0; /* More spacing */
         }
 
         .output-box, .error-box {
-            background-color: #3b3b3b;
+            background-color: var(--input-bg); /* Use input bg for contrast */
             padding: 15px;
-            border-radius: 4px;
-            border: 1px solid #555;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
             margin-top: 10px;
-            min-height: 50px;
-            white-space: pre-wrap; /* Preserve line breaks */
-            word-wrap: break-word; /* Wrap long words */
+            min-height: 100px; /* Slightly taller */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.95em; /* Slightly smaller for output */
+            line-height: 1.6;
         }
 
-        /* Styling for generated HTML elements */
+        /* Styling for generated HTML elements inside output-box */
         .output-box strong { /* Style bold text */
-             color: #ffffff; /* Make bold slightly brighter */
-             font-weight: bold;
+             color: #adc1d1; /* Slightly lighter than primary text */
+             font-weight: 600;
+        }
+        .output-box h1, .output-box h2, .output-box h3 { /* Style headings within output */
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-top: 1.5em;
+            margin-bottom: 1em;
+            font-weight: 600;
         }
         .output-box ul { /* Style bullet points */
-            margin-left: 20px; /* Indent lists */
-            padding-left: 20px;
+            margin-left: 0; /* Remove default browser indent */
+            padding-left: 2em; /* Control indent */
+            list-style: disc; /* Ensure disc */
+            margin-top: 0.5em;
+            margin-bottom: 1em;
         }
          .output-box li { /* Style list items */
-             margin-bottom: 5px; /* Add space between bullet points */
+             margin-bottom: 0.5em; /* Space between bullet points */
          }
 
 
         .error-box {
-            color: #ffcccc;
-            border-color: #ff5555;
+            color: var(--error-text);
+            border-color: var(--error-border);
+            background-color: rgba(248, 81, 73, 0.1); /* Subtle red background */
         }
 
         #loading {
-            color: #aaa;
-            margin-top: 10px;
+            color: var(--text-secondary);
+            margin-top: 15px;
             text-align: center;
         }
     </style>
