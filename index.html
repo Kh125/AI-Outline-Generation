@@ -7,7 +7,7 @@
     <!-- Add CDN link for marked.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* Base styles */
+        /* Base styles (Keep existing styles from previous version) */
         :root {
             --bg-color: #0d1117; /* GitHub dark background */
             --container-bg: #161b22; /* Slightly lighter container */
@@ -19,8 +19,12 @@
             --accent-blue: #58a6ff; /* GitHub blue */
             --button-bg: #238636; /* GitHub green button */
             --button-hover-bg: #2ea043; /* GitHub green button hover */
+            --button-secondary-bg: #21262d; /* Secondary button bg */
+            --button-secondary-hover-bg: #30363d; /* Secondary button hover */
+            --button-secondary-border: #30363d;
             --error-text: #f85149; /* GitHub error red */
             --error-border: #f85149;
+            --shadow-subtle: rgba(0, 0, 0, 0.2);
         }
 
         body {
@@ -28,7 +32,7 @@
             color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
             line-height: 1.5;
@@ -36,44 +40,57 @@
 
         .container {
             background-color: var(--container-bg);
-            padding: 30px;
-            border-radius: 6px; /* GitHub uses 6px */
+            padding: 25px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px var(--shadow-subtle);
             width: 100%;
-            max-width: 650px; /* Slightly wider */
+            max-width: 580px;
         }
 
         h1, h2 {
             color: var(--text-primary);
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 25px; /* More spacing */
+            padding-bottom: 8px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
-        h1 { font-size: 1.8em; }
-        h2 { font-size: 1.4em; }
+        h1 { font-size: 1.6em; }
+        h2 { font-size: 1.3em; }
 
         label {
             display: block;
-            margin-top: 20px; /* More spacing */
-            margin-bottom: 8px;
+            margin-top: 15px;
+            margin-bottom: 6px;
             color: var(--text-secondary);
-            font-weight: 600; /* Slightly bolder labels */
-            font-size: 0.9em;
+            font-weight: 600;
+            font-size: 0.85em;
         }
+
+        .label-container { /* Flex container for label and button */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .label-container label {
+            margin-top: 0; /* Remove top margin from label inside flex */
+        }
+
 
         input[type="number"],
         select,
         textarea {
-            width: calc(100% - 24px); /* Account for padding and border */
-            padding: 10px 12px;
-            margin-bottom: 15px;
+            width: calc(100% - 20px);
+            padding: 8px 10px;
+            margin-bottom: 12px;
             border: 1px solid var(--input-border);
             border-radius: 6px;
             background-color: var(--input-bg);
             color: var(--text-primary);
-            font-size: 1rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.4;
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
@@ -82,39 +99,37 @@
         textarea:focus {
             border-color: var(--accent-blue);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3); /* Subtle focus ring */
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
         }
 
         textarea {
-            resize: vertical; /* Allow vertical resizing */
-            min-height: 100px; /* Ensure decent minimum height */
+            resize: vertical;
+            min-height: 80px;
         }
 
         select {
-             width: 100%; /* Select needs full width */
-             appearance: none; /* Custom dropdown arrow styling needed for full control */
+             width: 100%;
+             appearance: none;
              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%238b949e'%3E%3Cpath d='M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z'/%3E%3C/svg%3E");
              background-repeat: no-repeat;
              background-position: right 10px center;
              background-size: 16px;
-             padding-right: 30px; /* Space for arrow */
+             padding-right: 30px;
         }
 
-
-        button {
+        button { /* Main Generate Button */
             background-color: var(--button-bg);
             color: white;
-            padding: 10px 20px;
+            padding: 9px 18px;
             border: 1px solid rgba(240, 246, 252, 0.1);
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             transition: background-color 0.2s ease-out;
             width: 100%;
-            margin-top: 15px;
+            margin-top: 10px;
         }
-
         button:hover {
             background-color: var(--button-hover-bg);
             border-color: rgba(240, 246, 252, 0.1);
@@ -126,60 +141,53 @@
              border-color: rgba(240, 246, 252, 0.1);
         }
 
+        .secondary-button { /* Style for Load Sample button */
+             background-color: var(--button-secondary-bg);
+             color: var(--text-secondary);
+             padding: 4px 10px; /* Smaller padding */
+             border: 1px solid var(--button-secondary-border);
+             border-radius: 6px;
+             cursor: pointer;
+             font-size: 0.8em; /* Smaller font */
+             font-weight: 500;
+             transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+        }
+        .secondary-button:hover {
+             background-color: var(--button-secondary-hover-bg);
+             border-color: #8b949e; /* Slightly lighter border on hover */
+             color: var(--text-primary);
+        }
+
+
         hr {
             border: none;
             border-top: 1px solid var(--border-color);
-            margin: 35px 0; /* More spacing */
+            margin: 30px 0;
         }
 
         .output-box, .error-box {
-            background-color: var(--input-bg); /* Use input bg for contrast */
-            padding: 15px;
+            background-color: var(--input-bg);
+            padding: 12px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            margin-top: 10px;
-            min-height: 100px; /* Slightly taller */
+            margin-top: 8px;
+            min-height: 80px;
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 0.95em; /* Slightly smaller for output */
-            line-height: 1.6;
+            font-size: 0.9em;
+            line-height: 1.5;
         }
-
-        /* Styling for generated HTML elements inside output-box */
-        .output-box strong { /* Style bold text */
-             color: #adc1d1; /* Slightly lighter than primary text */
-             font-weight: 600;
-        }
-        .output-box h1, .output-box h2, .output-box h3 { /* Style headings within output */
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-top: 1.5em;
-            margin-bottom: 1em;
-            font-weight: 600;
-        }
-        .output-box ul { /* Style bullet points */
-            margin-left: 0; /* Remove default browser indent */
-            padding-left: 2em; /* Control indent */
-            list-style: disc; /* Ensure disc */
-            margin-top: 0.5em;
-            margin-bottom: 1em;
-        }
-         .output-box li { /* Style list items */
-             margin-bottom: 0.5em; /* Space between bullet points */
-         }
-
-
-        .error-box {
-            color: var(--error-text);
-            border-color: var(--error-border);
-            background-color: rgba(248, 81, 73, 0.1); /* Subtle red background */
-        }
+        .output-box strong { color: #adc1d1; font-weight: 600; }
+        .output-box h1, .output-box h2, .output-box h3 { color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 4px; margin-top: 1.2em; margin-bottom: 0.8em; font-weight: 600; font-size: 1.1em; }
+        .output-box ul { margin-left: 0; padding-left: 1.8em; list-style: disc; margin-top: 0.4em; margin-bottom: 0.8em; }
+        .output-box li { margin-bottom: 0.4em; }
+        .error-box { color: var(--error-text); border-color: var(--error-border); background-color: rgba(248, 81, 73, 0.05); }
 
         #loading {
             color: var(--text-secondary);
-            margin-top: 15px;
+            margin-top: 10px;
             text-align: center;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -189,14 +197,22 @@
 
         <label for="taskType">Select Task:</label>
         <select id="taskType">
+            <option value="bio_description">Generate Job Seeker Bio</option>
             <option value="job_description">Generate Job Description</option>
-            <option value="user_bio">Generate Job Seeker Bio</option>
+            <option value="project_description">Generate Project Description</option>
+            <option value="experience_description">Generate Work Experience</option>
+            <option value="education_description">Generate Education Description</option>
+            <option value="test_description">Test Description</option>
         </select>
 
-        <label for="inputText">Input Text:</label>
-        <textarea id="inputText" rows="8" placeholder="Enter job details OR seeker details here..."></textarea>
+        <!-- *** UPDATED: Label and Load Sample Button in a container *** -->
+        <div class="label-container">
+            <label for="inputText">Input Details:</label>
+            <button id="loadSampleButton" class="secondary-button">Load Sample</button>
+        </div>
+        <textarea id="inputText" rows="8" placeholder="Enter details for the selected task or click 'Load Sample'..."></textarea>
 
-        <label for="maxLength">Max Output Length (Optional):</label>
+        <label for="maxLength" id="maxLengthLabel">Max Output Length (Job Desc Only):</label>
         <input type="number" id="maxLength" placeholder="e.g., 1500">
 
         <button id="generateButton">Generate</button>
@@ -207,6 +223,7 @@
         <div id="output" class="output-box">
             Waiting for generation...
         </div>
+        <div id="tokenInfo" style="font-size: 0.8em; color: var(--text-secondary); margin-top: 5px; text-align: right;"></div>
         <div id="loading" style="display: none;">Generating...</div>
         <div id="error" class="error-box" style="display: none;"></div>
 
@@ -217,46 +234,72 @@
             const taskTypeSelect = document.getElementById('taskType');
             const inputTextarea = document.getElementById('inputText');
             const maxLengthInput = document.getElementById('maxLength');
+            const maxLengthLabel = document.getElementById('maxLengthLabel');
             const generateButton = document.getElementById('generateButton');
+            const loadSampleButton = document.getElementById('loadSampleButton');
             const outputDiv = document.getElementById('output');
+            const tokenInfoDiv = document.getElementById('tokenInfo');
             const loadingDiv = document.getElementById('loading');
             const errorDiv = document.getElementById('error');
 
-            // --- ⬇️ IMPORTANT: REPLACE THESE PLACEHOLDERS ⬇️ ---
             const DIFY_API_URL = 'https://api.dify.ai/v1/workflows/run';
-            const DIFY_API_KEY = 'app-cgtngfiCzymjd46gM1oValin'; // Looks like 'app-...'
-            const DIFY_USER_ID = 'test-user-html-123'; // A unique identifier for the user (can be anything for testing)
-            // --- ⬆️ IMPORTANT: REPLACE THESE PLACEHOLDERS ⬆️ ---
+            const DIFY_API_KEY = 'app-cgtngfiCzymjd46gM1oValin';
+            const DIFY_USER_ID = 'test-user-html-123';
+
+             // *** NEW: Sample Text Data ***
+             const sampleTexts = {
+                bio_description: `I'm aiming for a Senior Product Manager role. I have about 8 years of experience, mostly in SaaS B2B products. My strengths include roadmap planning, user research, A/B testing, and leading cross-functional teams. I successfully launched 3 major features last year that increased user retention by 10%.`,
+                job_description: `Hiring a junior graphic designer. Needs proficiency in Adobe Creative Suite (Photoshop, Illustrator mainly). Responsibilities include creating social media graphics, assisting with presentation design, and maintaining brand consistency across materials. Looking for someone creative with a good portfolio, maybe 1 year experience or strong intern work. Bachelor's degree preferred.`,
+                project_description: `Project: E-commerce Checkout Redesign. Goal was to improve conversion rate. I was the lead frontend developer. Used React, Redux, and Stripe API. Conducted user testing and iterated on the design based on feedback. Resulted in a 15% increase in completed checkouts after launch in Q3.`,
+                experience_description: `Role: Marketing Specialist at Tech Solutions Inc. (June 2021 - Present). I manage PPC campaigns on Google Ads and LinkedIn, optimize landing pages for conversion, create weekly performance reports, and collaborate with the sales team on lead generation. Increased lead quality score by 20% through better campaign targeting. Managed a budget of $50k/quarter.`,
+                education_description: `University of Example, B.S. in Computer Science, graduated May 2023. GPA: 3.8. Relevant courses: Data Structures, Algorithms, AI, Database Management. Senior Project: Developed a mobile app for campus event discovery using React Native and Firebase. Dean's List for 4 semesters.`,
+                test_description: `This is a test input to see how the model handles generic text. Please summarize this sentence in a professional tone. The goal is to verify the workflow connects properly and the selected AI model responds.`
+            };
+
+            // --- Event Listener for Load Sample Button ---
+            loadSampleButton.addEventListener('click', () => {
+                const selectedTask = taskTypeSelect.value;
+                if (sampleTexts[selectedTask]) {
+                    inputTextarea.value = sampleTexts[selectedTask];
+                } else {
+                    inputTextarea.value = ''; // Clear if no sample exists for some reason
+                }
+            });
+            // --- End Load Sample Logic ---
+
+
+            function toggleMaxLengthVisibility() {
+                if (taskTypeSelect.value === 'job_description') {
+                    maxLengthInput.style.display = 'block';
+                    maxLengthLabel.style.display = 'block';
+                } else {
+                    maxLengthInput.style.display = 'none';
+                    maxLengthLabel.style.display = 'none';
+                    maxLengthInput.value = '';
+                }
+            }
+            toggleMaxLengthVisibility();
+            taskTypeSelect.addEventListener('change', toggleMaxLengthVisibility);
 
             generateButton.addEventListener('click', async () => {
                 const taskType = taskTypeSelect.value;
                 const inputText = inputTextarea.value.trim();
                 const maxLength = maxLengthInput.value ? parseInt(maxLengthInput.value, 10) : null;
 
-                outputDiv.innerHTML = 'Waiting for generation...'; // Use innerHTML
+                outputDiv.innerHTML = 'Waiting for generation...';
+                tokenInfoDiv.textContent = '';
                 outputDiv.style.display = 'block';
                 loadingDiv.style.display = 'block';
                 errorDiv.style.display = 'none';
                 errorDiv.textContent = '';
                 generateButton.disabled = true;
 
-                // Prepare the inputs based on the selected task
-                let inputs = {};
-                if (taskType === 'job_description') {
-                    inputs.task_type = taskType;
-                    inputs.job_input_text = inputText;
-                    if (maxLength) {
-                        inputs.max_output_length = maxLength;
-                    }
-                    // Since tone is constant 'Professional', we don't need to send it
-                } else if (taskType === 'user_bio') {
-                    inputs.task_type = taskType;
-                    inputs.user_input_text = inputText;
-                     // Since tone is constant 'Professional', we don't need to send it
-                } else {
-                    showError('Invalid task selected.');
-                    resetUIState();
-                    return;
+                let inputs = {
+                    task_type: taskType,
+                    input_text: inputText
+                };
+                if (taskType === 'job_description' && maxLength) {
+                    inputs.max_output_length = maxLength;
                 }
 
                 if (!inputText) {
@@ -264,7 +307,6 @@
                     resetUIState();
                     return;
                 }
-
 
                 try {
                     const response = await fetch(DIFY_API_URL, {
@@ -275,27 +317,33 @@
                         },
                         body: JSON.stringify({
                             inputs: inputs,
-                            response_mode: 'blocking', // Use 'blocking' for workflows
+                            response_mode: 'blocking',
                             user: DIFY_USER_ID,
                         }),
                     });
 
                     if (!response.ok) {
                         const errorData = await response.json();
-                        throw new Error(`API Error (${response.status}): ${errorData.message || 'Unknown error'}`);
+                        throw new Error(`API Error (${response.status}): ${errorData.code} - ${errorData.message || 'Unknown error'}`);
                     }
 
                     const result = await response.json();
 
+                    if (result?.data?.status !== 'succeeded') {
+                         throw new Error(`Workflow failed: ${result?.data?.error || 'Unknown Dify workflow error'}`);
+                    }
+
                     const rawGeneratedText = result?.data?.outputs?.output || 'No output received or unexpected response structure.';
+                    const tokenCount = result?.data?.total_tokens;
 
-                    // --- Convert Markdown to HTML using marked.js ---
-                    const formattedHtml = marked.parse(rawGeneratedText);
-                    // --- End Conversion ---
+                    const sanitizedHtml = marked.parse(rawGeneratedText, { sanitize: false });
+                    outputDiv.innerHTML = sanitizedHtml;
 
-                    // --- Display the formatted HTML ---
-                    outputDiv.innerHTML = formattedHtml;
-                    // --- End Display ---
+                    if (tokenCount !== undefined && tokenCount !== null) {
+                         tokenInfoDiv.textContent = `Tokens used: ${tokenCount}`;
+                    } else {
+                         tokenInfoDiv.textContent = '';
+                    }
 
                 } catch (error) {
                     console.error('Error calling Dify API:', error);
@@ -308,7 +356,8 @@
             function showError(message) {
                 errorDiv.textContent = message;
                 errorDiv.style.display = 'block';
-                outputDiv.style.display = 'none'; // Hide the normal output box on error
+                outputDiv.style.display = 'none';
+                tokenInfoDiv.textContent = '';
             }
 
             function resetUIState() {
@@ -319,4 +368,3 @@
     </script>
 </body>
 </html>
-
